@@ -34,7 +34,8 @@ module Rack
         source, medium, term, content, campaign, from, time, lp = cookie_info(req)
       end
 
-      if params_tag && params_tag != cookie_tag
+      # If params are set always re-read and store the utm params.
+      if params_tag
         if source
           if @allow_overwrite
             source, medium, term, content, campaign, from, time, lp = params_info(req)
@@ -58,7 +59,9 @@ module Rack
 
       status, headers, body = @app.call(env)
 
-      if source != cookie_tag
+      # If params are set we always store everything we have into cookies.
+      # This ensures it's always the last utm params that we see that will be recoreded.
+      if params_tag
         bake_cookies(headers, source, medium, term, content, campaign, from, time, lp)
       end
 
