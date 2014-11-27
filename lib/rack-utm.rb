@@ -2,7 +2,7 @@ module Rack
   #
   # Rack Middleware for extracting information from the request params and cookies.
   # It populates +env['affiliate.tag']+, # +env['affiliate.from']+ and
-  # +env['affiliate.time'] if it detects a request came from an affiliated link 
+  # +env['affiliate.time'] if it detects a request came from an affiliated link
   #
   class Utm
 
@@ -11,17 +11,17 @@ module Rack
     COOKIE_TERM     = "u_term"
     COOKIE_CONTENT  = "u_content"
     COOKIE_CAMPAIGN = "u_campaign"
-    
+
     COOKIE_FROM     = "u_from"
     COOKIE_TIME     = "u_time"
     COOKIE_LP       = "u_lp"
-    
+
     def initialize(app, opts = {})
       @app = app
       @key_param = "utm_source"
       @cookie_ttl = opts[:ttl] || 60*60*24*30  # 30 days
       @cookie_domain = opts[:domain] || nil
-      @allow_overwrite = opts[:overwrite].nil? ? true : opts[:overwrite] 
+      @allow_overwrite = opts[:overwrite].nil? ? true : opts[:overwrite]
     end
 
     def call(env)
@@ -66,7 +66,7 @@ module Rack
     end
 
     def utm_info(req)
-      params_info(req) || cookie_info(req) 
+      params_info(req) || cookie_info(req)
     end
 
     def params_info(req)
@@ -89,7 +89,7 @@ module Rack
         req.cookies[COOKIE_TERM],
         req.cookies[COOKIE_CONTENT],
         req.cookies[COOKIE_CAMPAIGN],
-        
+
         req.cookies[COOKIE_FROM],
         req.cookies[COOKIE_TIME],
         req.cookies[COOKIE_LP]
@@ -114,7 +114,7 @@ module Rack
                          :path => "/"}
           cookie_hash[:domain] = @cookie_domain if @cookie_domain
           Rack::Utils.set_cookie_header!(headers, key, cookie_hash)
-      end 
+      end
     end
   end
 end
